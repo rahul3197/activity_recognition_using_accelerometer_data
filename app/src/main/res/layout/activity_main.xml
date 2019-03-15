@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@mipmap/ic_launcher">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:text="ACTIVITY"
+    android:textSize="20dp"
+    android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:text="activity"/>
+    <TextView
+        android:id="@+id/rotation_x"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:text="rotation_x"
+        android:textAlignment="center"/>
+    <TextView
+        android:id="@+id/rotation_y"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:text="rotation_y"/>
+    <TextView
+        android:id="@+id/rotation_z"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:text="rotation_z"/>
+</LinearLayout>
