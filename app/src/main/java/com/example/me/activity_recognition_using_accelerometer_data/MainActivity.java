@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import java.lang.*;
 
@@ -16,13 +17,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView activity,r_x,r_y,r_z;
     private Sensor accelerometer,gyroscope,gravity_sensor,magnetic_sensor;
     private SensorManager manager;
-    private double rx,ry,rz;
-    private int sampling_timeus=100000,sampling_time_forgyro=1000000;
+    private double rx,ry,rz,magnitude_of_velocity=0;
+    private int sampling_timeus=2000000,sampling_time_forgyro=1000000;
     //private double velocity_x=0,velocity_y=0,y,velocity_z=0,mag_velocity=0;
 //    private float[] mRotationMatrix = new float[9];
     private float[] accel_data= new float[3];
+    private float[] accel_data_prev=new float[3];
     private float[] gyro_dat =  new float[3];
-//    private float[] mag_data=new float[3];
+    private float[] velocity_data=new float[3];
+    private double magnitude_of_acceleration;
+    private boolean flag;
+
+    //    private float[] mag_data=new float[3];
 //    private float[] accel_data_g=  new float[3];
 //    private float[] grav_data  = new float[3];
     @Override
@@ -48,35 +54,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 //        manager.registerListener(this,magnetic_sensor,sampling_timeus);
 //     manager.registerListener(this,gravity_sensor,sampling_timeus);
     }
+   @Override
+   public void onStart(){
+        super.onStart();
+
+
+   }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType()==Sensor.TYPE_LINEAR_ACCELERATION) {
+        if(flag) {
+            if (event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
 
 
-            accel_data=event.values;
-        }
+                accel_data = event.values;
+                magnitude_of_acceleration = Math.sqrt(accel_data[0] * accel_data[0] + accel_data[1] * accel_data[1] + accel_data[2] * accel_data[2]);
+                activity_detection(magnitude_of_acceleration);
+            } else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
 
-        else
-
-            if(event.sensor.getType()==Sensor.TYPE_GYROSCOPE)
-            {
-
-               r_x.setText(Math.round(event.values[0]*10000)/10000.0+"");
-               r_y.setText(Math.round(event.values[1]*10000)/10000.0+"");
-               r_z.setText(Math.round(event.values[2]*10000)/10000.0+"");
+                r_x.setText(Math.round(event.values[0] * 10000) / 10000.0 + "");
+                r_y.setText(Math.round(event.values[1] * 10000) / 10000.0 + "");
+                r_z.setText(Math.round(event.values[2] * 10000) / 10000.0 + "");
 
             }
+        }
 
-        activity_detection(accel_data);
     }
 
-    private void activity_detection(float[] accel_data) {
+    private void activity_detection(double magnitude_of_velocity) {
 
-        double mag_acc  = Math.sqrt(accel_data[0]*accel_data[0]+accel_data[1]*accel_data[1]+accel_data[2]*accel_data[2]);
-       if(mag_acc>2.5)
+
+        //double mag_acc  = Math.sqrt(accel_data[0]*accel_data[0]+accel_data[1]*accel_data[1]+accel_data[2]*accel_data[2]);
+
+        if(magnitude_of_velocity>2.5)
            activity.setText("running");
-       else if(mag_acc>0.8)
+       else if(magnitude_of_velocity>1)
              activity.setText("walking");
        else
             activity.setText("sleeping");
@@ -86,4 +98,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+    public void onstartclick(View v)
+    {
+        flag=true;
+
+    }
+    public void  onstopclick(View v)
+    {
+        flag=false;
+        r_x.setText(0+"");
+        r_y.setText(0+"");
+        r_z.setText(0+"");
+        activity.setText("sleeping");
+    }
+
+
 }
